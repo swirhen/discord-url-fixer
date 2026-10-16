@@ -11,6 +11,8 @@ RULES := [
 GroupAdd("Discord", "ahk_exe Discord.exe")
 GroupAdd("Discord", "ahk_exe DiscordPTB.exe")
 GroupAdd("Discord", "ahk_exe DiscordCanary.exe")
+; Stack Next SE は複数のサービスを開くので、ウィンドウタイトルに Discord を含むときだけ対象にする
+GroupAdd("Discord", "Discord ahk_exe Stack Next SE.exe")
 
 ConvertText(text) {
     for rule in RULES

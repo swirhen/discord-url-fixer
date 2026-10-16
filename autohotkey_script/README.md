@@ -4,7 +4,7 @@ Discord に Ctrl+V で貼り付けるときだけ、クリップボード中の 
 
 - 他のアプリでの貼り付けには影響しない
 - 貼り付け後、クリップボードは元の内容に戻る
-- 対象は Discord のデスクトップアプリ（`Discord.exe` / `DiscordPTB.exe` / `DiscordCanary.exe`）。ブラウザ版 Discord は対象外
+- 対象は Discord のデスクトップアプリ（`Discord.exe` / `DiscordPTB.exe` / `DiscordCanary.exe`）と、Stack Next SE で Discord を開いているとき（ウィンドウタイトルに `Discord` を含むときだけ）。ブラウザ版 Discord は対象外
 
 ## 使い方
 
