@@ -1,3 +1,4 @@
 token.txt
 rules.json
 __pycache__/
+.venv/

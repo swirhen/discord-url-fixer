@@ -24,3 +24,17 @@ python -m venv $HOME\.venv\discord-url-fixer
 ```powershell
 & $HOME\.venv\discord-url-fixer\Scripts\python.exe bot.py
 ```
+
+## 本番サーバー（prod-checker）
+
+`/home/swirhen/discord-url-fixer` にクローンし、venv はリポジトリ内の `.venv` に作る。systemd のシステムサービスとして常駐させる。
+
+```bash
+cd ~/discord-url-fixer
+python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
+sudo cp discord-url-fixer.service /etc/systemd/system/
+sudo systemctl daemon-reload && sudo systemctl enable --now discord-url-fixer
+```
+
+- 更新：`git pull && sudo systemctl restart discord-url-fixer`
+- ログ：`journalctl -u discord-url-fixer -f`
