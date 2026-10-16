@@ -22,6 +22,9 @@ URL_PATTERN = re.compile(r"(?<!<)https?://[^\s<>|]+")
 reply_map: dict[int, int] = {}
 REPLY_MAP_LIMIT = 1000
 
+# メッセージの flags で埋め込み非表示を表すビット
+SUPPRESS_EMBEDS_FLAG = 1 << 2
+
 log = logging.getLogger("url-fixer")
 
 
@@ -82,13 +85,33 @@ async def on_message(message: discord.Message) -> None:
     if len(reply_map) > REPLY_MAP_LIMIT:
         reply_map.pop(next(iter(reply_map)))
 
-    # 元発言の埋め込みを非表示にする（Manage Messages 権限が必要）
+    await suppress_embeds(message)
+
+
+async def suppress_embeds(message: discord.Message | discord.PartialMessage) -> None:
+    """元発言の埋め込みを非表示にする（Manage Messages 権限が必要）。"""
     try:
         await message.edit(suppress=True)
     except discord.Forbidden:
         log.warning("埋め込みを非表示にする権限がありません（#%s）", getattr(message.channel, "name", "?"))
     except discord.HTTPException as e:
         log.warning("埋め込みの非表示に失敗しました: %s", e)
+
+
+@client.event
+async def on_raw_message_edit(payload: discord.RawMessageUpdateEvent) -> None:
+    # 埋め込みは投稿より遅れて付くことがあり、先に非表示にしても後から表示されてしまう。
+    # 返信済みの発言に埋め込みが付いたら、もう一度非表示にする
+    if payload.message_id not in reply_map:
+        return
+    data = payload.data
+    if not data.get("embeds") or int(data.get("flags", 0)) & SUPPRESS_EMBEDS_FLAG:
+        return
+    channel = client.get_channel(payload.channel_id)
+    if not isinstance(channel, discord.abc.Messageable):
+        return
+    log.info("後から付いた埋め込みを非表示にします（message=%s）", payload.message_id)
+    await suppress_embeds(channel.get_partial_message(payload.message_id))  # type: ignore[attr-defined]
 
 
 @client.event
