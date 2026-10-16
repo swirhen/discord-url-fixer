@@ -1,0 +1,6 @@
+[
+  {
+    "pattern": "^https?://(?:www\\.)?(?:x|twitter)\\.com/",
+    "replace": "https://fxtwitter.com/"
+  }
+]
