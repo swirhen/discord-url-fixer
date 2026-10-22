@@ -1,6 +1,6 @@
 [
   {
-    "pattern": "^https?://(?:www\\.)?(?:x|twitter)\\.com/",
+    "pattern": "^https?://(?:www\\.)?(?:x|twitter)\\.com/(?=[^?#]*/status/\\d)",
     "replace": "https://fxtwitter.com/"
   }
 ]
