@@ -38,8 +38,5 @@ $^v:: {
         return
     }
     Send("^v")
-    ; 貼り付けが終わる前に戻すと元の内容が貼られるので、少し待ってから戻す
-    Sleep(300)
-    A_Clipboard := saved
 }
 #HotIf
